@@ -69,6 +69,6 @@ func detectContext(c *gin.Context) (Context, bool) {
 }
 
 func updateHeaders(c *gin.Context, b Context) {
-	c.Set(headerUniqueID, b.UniqueID)
-	c.Set(headerRequestID, b.RequestId)
+	c.Writer.Header().Set(headerUniqueID, b.UniqueID)
+	c.Writer.Header().Set(headerRequestID, strconv.Itoa(int(b.RequestId)))
 }
