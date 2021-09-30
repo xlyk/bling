@@ -17,22 +17,23 @@ var (
 	headerRequestID = "bling-rid"
 )
 
-func init() {
-	fmt.Println("[BLING] bling!")
-}
+//Bling - Entrypoint for bling
+func Bling() gin.HandlerFunc {
+	fmt.Println("[BLING] bling loaded!")
 
-func Bling(c *gin.Context) {
-	blingCtx, existing := detectContext(c)
-	if existing {
-		fmt.Printf("[BLING] found existing bling context (uid: %s, rid: %d)\n", blingCtx.UniqueID, blingCtx.RequestId)
-		blingCtx.RequestId += 1
-	} else {
-		fmt.Printf("[BLING] created new bling context (uid: %s)\n", blingCtx.UniqueID)
+	return func(c *gin.Context) {
+		blingCtx, existing := detectContext(c)
+		if existing {
+			fmt.Printf("[BLING] found existing bling context (uid: %s, rid: %d)\n", blingCtx.UniqueID, blingCtx.RequestId)
+			blingCtx.RequestId += 1
+		} else {
+			fmt.Printf("[BLING] created new bling context (uid: %s)\n", blingCtx.UniqueID)
+		}
+
+		updateHeaders(c, blingCtx)
+
+		c.Next()
 	}
-
-	updateHeaders(c, blingCtx)
-
-	c.Next()
 }
 
 func newContext() *Context {
